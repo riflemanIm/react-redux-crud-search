@@ -1,24 +1,28 @@
 import React from "react";
+import {
+  Form,
+  TextArea,
+  Comment,
+  Button,
+  Grid,
+  Segment
+} from "semantic-ui-react";
 
 class Task extends React.Component {
   constructor(props) {
     super(props);
     this.state = { edit: false };
   }
-
   edit = () => {
-    console.log("edit");
     this.setState({
       edit: true
     });
   };
 
   save = () => {
-    //console.log(this.props.item);
-    //return;
     this.props.onSaveTrack({
       id: this.props.item.id,
-      name: this.textarea.value
+      name: this.inputtext.ref.value
     });
     this.setState({
       edit: false
@@ -31,41 +35,45 @@ class Task extends React.Component {
 
   viewNorm() {
     return (
-      <div className="box">
-        <div className="elem_row">
-          <div className="text">{this.props.children}</div>
-        </div>
-        <div className="elem_row">
-          <button onClick={this.edit} className="btn ligth">
-            edit
-          </button>
-        </div>
-        <div className="elem_row">
-          <button onClick={this.remove} className="btn red">
-            delete
-          </button>
-        </div>
-      </div>
+      <Grid columns="equal">
+        <Grid.Column>
+          <Segment>
+            <Comment>
+              <Comment.Content>{this.props.children} </Comment.Content>
+            </Comment>
+
+            <Button onClick={this.edit} color="blue">
+              Edit
+            </Button>
+
+            <Button onClick={this.remove} color="red">
+              delete
+            </Button>
+          </Segment>
+        </Grid.Column>
+      </Grid>
     );
   }
 
   viewEdit() {
     return (
-      <div className="box">
-        <div className="elem_row">
-          <textarea
-            ref={text => {
-              this.textarea = text;
-            }}
-            defaultValue={this.props.children}
-          />
-        </div>
-        <div className="elem_row">
-          <button onClick={this.save} className="btn ok">
+      <Grid columns="equal">
+        <Grid.Column>
+          <Form>
+            <TextArea
+              autoHeight
+              placeholder="Fiel is empty ..."
+              ref={text => {
+                this.inputtext = text;
+              }}
+              defaultValue={this.props.children}
+            />
+          </Form>
+          <Button onClick={this.save} positive>
             save
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Grid.Column>
+      </Grid>
     );
   }
 

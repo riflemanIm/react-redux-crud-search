@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getTracks } from "../actions/tracks";
 import Task from "../components/Task";
-import { Input, Button } from "semantic-ui-react";
+import { Grid, Input, Button } from "semantic-ui-react";
 
 //const Tracks = ({ tracks, onAddTrack, onFindTrack, onGetTracks }) => {
 class Tracks extends Component {
@@ -10,20 +10,16 @@ class Tracks extends Component {
     super(props);
     this.inx = null;
   }
-
   componentDidMount() {
     this.props.onGetTracks();
   }
-
   findTrack = () => {
-    console.log("findTrack", this.formInput.value);
-    this.props.onFindTrack(this.formInput.value);
+    this.props.onFindTrack(this.inputserch.inputRef.value);
   };
-
   addTack = () => {
-    if (this.formInput.value.trim())
-      this.props.onAddTrack(this.formInput.value);
-    this.formInput.value = "";
+    if (this.inputtext.inputRef.value.trim())
+      this.props.onAddTrack(this.inputtext.inputRef.value);
+    this.inputtext.inputRef.value = "";
   };
 
   eachTask = (item, i) => {
@@ -41,28 +37,44 @@ class Tracks extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <input
-            type="text"
-            placeholder="serch/add"
-            onKeyUp={this.findTrack}
-            ref={input => {
-              this.formInput = input;
-            }}
-          />
-          <Button onClick={this.findTrack}>Find track</Button>
-          &nbsp;
-          <Button onClick={this.addTack}>addTrack</Button>
-        </div>
-
-        {this.props.tracks.map(this.eachTask)}
-        {/* {this.props.tracks.map((track, index) => (
+      <Grid>
+        <Grid.Row columns={2}>
+          <Grid.Column>
+            <Input
+              type="text"
+              icon="search"
+              placeholder="serch"
+              onKeyUp={this.findTrack}
+              ref={input => {
+                this.inputserch = input;
+              }}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <Input
+              type="text"
+              placeholder="write..."
+              ref={input => {
+                this.inputtext = input;
+              }}
+              action
+            >
+              <input />
+              <Button onClick={this.addTack} color="teal">
+                Add
+              </Button>
+            </Input>
+            {/* {this.props.tracks.map((track, index) => (
             <li key={index} onClick={this.editTrack}>
               {track.name}
             </li>
           ))} */}
-      </div>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>{this.props.tracks.map(this.eachTask)}</Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }
@@ -96,7 +108,6 @@ export default connect(mapStateToProps, dispatch => ({
     });
   },
   onFindTrack: name => {
-    console.log("name", name);
     dispatch({ type: "FIND_TRACK", payload: name });
   },
   onGetTracks: () => {

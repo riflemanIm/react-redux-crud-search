@@ -1,7 +1,7 @@
 const initialState = [];
 
 export default (state = initialState, action) => {
-  if (action.type === "ADD_TRACK") return [...state, action.payload];
+  if (action.type === "ADD_TRACK") return [action.payload, ...state];
   if (action.type === "SAVE_TRACK") {
     return [
       action.payload,
@@ -12,7 +12,9 @@ export default (state = initialState, action) => {
     return [...state.filter(item => item.id !== action.payload)];
   }
 
+
   if (action.type === "FETCH_TRACKS_SUCCESS") return action.payload;
   //if (action.type === "REF_TRACKS") return action.payload;
+
   return state;
 };
